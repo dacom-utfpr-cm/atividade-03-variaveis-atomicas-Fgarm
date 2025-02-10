@@ -9,7 +9,6 @@ public class NumberGenerator {
         do {
             prev = sequenceNumber.get();
             next = this.sequenceNumber.get() + 1;
-            //System.out.println(prev + ", " + sequenceNumber);
         } while (!sequenceNumber.compareAndSet(prev, next));
         return next;
     }
