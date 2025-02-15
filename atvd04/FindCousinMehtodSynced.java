@@ -15,7 +15,7 @@ public class FindCousinMehtodSynced {
             final int threadId = i;
             final int comeco = start;
             final int fim = end;
-            threads[i] = new Thread(() -> find(comeco, fim, threadId));
+            threads[i] = new Thread(() -> find(comeco + threadId, fim, num_threads));
             threads[i].start();
         }
         for (Thread t : threads) {
@@ -32,8 +32,8 @@ public class FindCousinMehtodSynced {
         counter += 1;
     }
 
-    private void find(Integer start, Integer end, Integer offset) {
-        for (int number = start + offset; number <= end; number += offset) {
+    private void find(Integer start, Integer end, Integer num_threads) {
+        for (int number = start; number <= end; number += num_threads) {
             boolean prime = true;
             if (number < 2) continue;
             for (int i = 2; i <= Math.sqrt(number); i++) {

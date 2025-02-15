@@ -1,13 +1,12 @@
 package atvd04;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class FindCousinAtomic {
-    private AtomicInteger counter;
+    private final AtomicInteger counter = new AtomicInteger(0);
 
-    public FindCousinAtomic() {
-        counter.set(0);
-    }
 
     
 
@@ -17,7 +16,7 @@ public class FindCousinAtomic {
             final int threadId = i;
             final int comeco = start;
             final int fim = end;
-            threads[i] = new Thread(() -> find(comeco, fim, threadId));
+            threads[i] = new Thread(() -> find(comeco + threadId, fim, num_threads));
             threads[i].start();
         }
         for (Thread t : threads) {
@@ -31,11 +30,15 @@ public class FindCousinAtomic {
     }
 
     private void Sum() {
-        counter.incrementAndGet();
+        Integer prev, next;
+        do {
+            prev = this.counter.get();
+            next = this.counter.get() + 1;
+        } while (!counter.compareAndSet(prev, next));
     }
 
-    private void find(Integer start, Integer end, Integer offset) {
-        for (int number = start + offset; number <= end; number += offset) {
+    private void find(Integer start, Integer end, Integer num_threads) {
+        for (int number = start; number <= end; number += num_threads) {
             boolean prime = true;
             if (number < 2) continue;
             for (int i = 2; i <= Math.sqrt(number); i++) {
